@@ -313,8 +313,8 @@ renderBlock(pageFooter, createFilmDeatilsTemplate(), 'afterend');
 // Временный блок
 const popup = document.querySelector('.film-details');
 const popupCloseButton = popup.querySelector('.film-details__close-btn');
-const closePopup = () => {
-  popup.classList.add('visually-hidden');
-  popupCloseButton.removeEventListener('click', closePopup);
+const onPopupClose = () => {
+  popup.remove();
+  popupCloseButton.removeEventListener('click', onPopupClose);
 };
-popupCloseButton.addEventListener('click', closePopup);
+popupCloseButton.addEventListener('click', onPopupClose);
