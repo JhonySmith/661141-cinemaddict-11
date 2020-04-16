@@ -1,4 +1,5 @@
 // Блок сортировки
+
 export const createSortMenuTemplate = () => {
   return (
     `<ul class="sort">
