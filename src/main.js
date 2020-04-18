@@ -6,7 +6,7 @@ import {createProfileTemplate} from "./components/profile";
 import {createShowMoreButtonTemlate} from "./components/show-more-button";
 import {createSortMenuTemplate} from "./components/sort-menu";
 import {generateFilmCardsArr} from "./mock/film";
-import {filterList} from "./mock/filter-menu";
+import {generateFilters} from "./mock/filter-menu";
 
 const FILMS_NUMBER = 20;
 const FILMS_NUMBER_STEP = 5;
@@ -23,7 +23,9 @@ const pageHeader = document.querySelector(`.header`);
 const pageMain = document.querySelector(`.main`);
 
 const films = generateFilmCardsArr(FILMS_NUMBER);
-const filters = filterList(films);
+const filters = generateFilters(films);
+const topRatedFilmsArr = films.slice().sort((a, b) => b.raiting - a.raiting);
+const mostCommentFilmsArr = films.slice().sort((a, b) => b.commentsCount - a.commentsCount);
 
 // Отрисовка элементов на странице
 renderBlock(pageHeader, createProfileTemplate());
@@ -51,15 +53,15 @@ films.slice(0, showingFilmsCount)
 renderBlock(mainFilmsBlock, createShowMoreButtonTemlate());
 
 // Отрисовка просматриваемых и комментируемых фильмов
-films.slice(0, SUB_FILMS_NUMBER)
-  .forEach((film) => {
-    renderBlock(topRatedFilms, createFilmCardTemlate(film));
-    renderBlock(mostCommentedFilms, createFilmCardTemlate(film));
-  });
+topRatedFilmsArr.slice(0, SUB_FILMS_NUMBER)
+  .forEach((film) => renderBlock(topRatedFilms, createFilmCardTemlate(film)));
+
+mostCommentFilmsArr.slice(0, SUB_FILMS_NUMBER)
+  .forEach((film) => renderBlock(mostCommentedFilms, createFilmCardTemlate(film)));
 
 const pageFooter = document.querySelector(`.footer`);
 // Отрисовка карточки фильма
-renderBlock(pageFooter, createFilmDeatilsTemplate(), `afterend`);
+renderBlock(pageFooter, createFilmDeatilsTemplate(films[0]), `afterend`);
 
 // Временный блок
 const popup = document.querySelector(`.film-details`);

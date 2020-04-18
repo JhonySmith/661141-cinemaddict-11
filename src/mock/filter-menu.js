@@ -1,11 +1,19 @@
-export const filterList = (films) => {
-  const watchList = films.filter((object) => object.isWatchList);
-  const watched = films.filter((object) => object.isWatched);
-  const favorite = films.filter((object) => object.isFavorite);
+import {filterTitles} from "../const";
 
-  return {
-    watchList,
-    watched,
-    favorite,
-  };
+const generateFilters = (films) => {
+  const filterCaptions = [
+    ``,
+    (films.filter((object) => object.isWatchList)).length,
+    (films.filter((object) => object.isWatched)).length,
+    (films.filter((object) => object.isFavorite)).length
+  ];
+
+  return filterTitles.map((it, i) => {
+    return {
+      name: it,
+      count: filterCaptions[i]
+    };
+  });
 };
+
+export {generateFilters};

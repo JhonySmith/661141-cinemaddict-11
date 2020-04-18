@@ -1,3 +1,7 @@
+import {getRandomNumer} from "../utils.js";
+import {getRandomArrElement} from "../utils.js";
+import {generateCommentsArr} from "./comments";
+
 const titles = [`The Dance of life`, `Sagebrush Trail`, `The Man with the Golden Arm`];
 
 const posters = [`made-for-each-other.png`, `popeye-meets-sinbad.png`, `sagebrush-trail.jpg`, `santa-claus-conquers-the-martians.jpg`, `the-dance-of-life.jpg`, `the-great-flamarion.jpg`, `the-man-with-the-golden-arm.jpg`];
@@ -15,15 +19,6 @@ const descriptions = [
   `In rutrum ac purus sit amet tempus.`
 ];
 
-const getRandomNumer = (min, max) => {
-  return min + Math.floor(Math.random() * (max - min));
-};
-
-const getRandomArrElement = (arr) => {
-  const randomIndex = getRandomNumer(0, arr.length);
-  return arr[randomIndex];
-};
-
 const generateDescriptoin = (texts) => {
   const textsCount = getRandomNumer(1, 6);
   const descriptionStartIndex = getRandomNumer(1, texts.length - textsCount);
@@ -35,16 +30,25 @@ const generateDescriptoin = (texts) => {
 
 const generateFilmCardData = () => {
   const title = getRandomArrElement(titles);
+  const commentsCount = getRandomNumer(1, 5);
+  const comments = generateCommentsArr(commentsCount);
+  const poster = getRandomArrElement(posters);
+  const description = generateDescriptoin(descriptions);
+  const isWatchList = Math.random() > 0.5;
+  const isWatched = Math.random() > 0.5;
+  const isFavorite = Math.random() > 0.5;
+  const raiting = (Math.floor(Math.random() * 100)) / 10;
 
   return {
     title,
-    poster: getRandomArrElement(posters),
-    description: generateDescriptoin(descriptions),
-    commentsCount: getRandomNumer(1, 5),
-    isWatchList: Math.random() > 0.5,
-    isWatched: Math.random() > 0.5,
-    isFavorite: Math.random() > 0.5,
-    raiting: (Math.floor(Math.random() * 100)) / 10,
+    poster,
+    description,
+    commentsCount,
+    isWatchList,
+    isWatched,
+    isFavorite,
+    raiting,
+    comments,
   };
 };
 
