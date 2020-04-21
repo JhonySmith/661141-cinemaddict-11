@@ -1,4 +1,4 @@
-import {filterTitles} from "../const";
+const FILTER_TITLES = [`All movies`, `Watchlist`, `History`, `Favorites`];
 
 const generateFilters = (films) => {
   const filterCaptions = [
@@ -8,7 +8,7 @@ const generateFilters = (films) => {
     (films.filter((object) => object.isFavorite)).length
   ];
 
-  return filterTitles.map((it, i) => {
+  return FILTER_TITLES.map((it, i) => {
     return {
       name: it,
       count: filterCaptions[i]

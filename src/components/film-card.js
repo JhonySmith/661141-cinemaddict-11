@@ -1,7 +1,14 @@
 // Карточка фильма
 export const createFilmCardTemlate = (film) => {
 
-  const {title, poster, description, commentsCount, isWatchList, isWatched, isFavorite, raiting} = film;
+  const title = film.title;
+  const poster = film.poster;
+  const description = film.description;
+  const commentsCount = film.comments.lenght;
+  const isWatchList = film.isWatch;
+  const isWatched = film.isWatched;
+  const isFavorite = film.isFavorite;
+  const raiting = film.raiting;
 
   return (
     `<article class="film-card">

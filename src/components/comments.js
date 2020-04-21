@@ -1,15 +1,19 @@
 const createCommentMarkup = (comment) => {
-  const {authorName, emotion, commentText} = comment;
+  const authorName = comment.authorName;
+  const emotion = comment.emotion;
+  const commentText = comment.commentText;
+  const date = comment.date;
+
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${emotion}" width="55" height="55" alt="emoji-smile">
+        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
       </span>
       <div>
         <p class="film-details__comment-text">${commentText}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${authorName}</span>
-          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <span class="film-details__comment-day">${date}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>

@@ -1,11 +1,18 @@
 import {createCommentsTemplate} from "./comments";
 // Карточка с деталями фильма
 
-export const createFilmDeatilsTemplate = (film) => {
-  const {title, poster, description, commentsCount} = film;
+export const createFilmDetailsTemplate = (film) => {
+  const title = film.title;
+  const originalTitle = film.originalTitle;
+  const poster = film.poster;
+  const director = film.director;
+  const description = film.description;
+  const commentsCount = film.commentsCount;
   const raiting = film.raiting;
   const comments = film.comments;
   const commentsTemplate = createCommentsTemplate(comments);
+  const movieDuration = film.movieDuration;
+  const screenwriter = film.screenwriter;
 
   return (
     `<section class="film-details">
@@ -25,7 +32,7 @@ export const createFilmDeatilsTemplate = (film) => {
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
                   <h3 class="film-details__title">${title}</h3>
-                  <p class="film-details__title-original">Original: ${title}</p>
+                  <p class="film-details__title-original">Original: ${originalTitle}</p>
                 </div>
 
                 <div class="film-details__rating">
@@ -35,12 +42,12 @@ export const createFilmDeatilsTemplate = (film) => {
 
               <table class="film-details__table">
                 <tr class="film-details__row">
-                  <td class="film-details__term">Director</td>
+                  <td class="film-details__term">${director}</td>
                   <td class="film-details__cell">Anthony Mann</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+                  <td class="film-details__cell">${screenwriter}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
@@ -52,7 +59,7 @@ export const createFilmDeatilsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">1h 18m</td>
+                  <td class="film-details__cell">${movieDuration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>

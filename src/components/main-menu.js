@@ -1,8 +1,8 @@
 const createFilterMarkup = (filter) => {
   const {name, count} = filter;
-  const isNumber = name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`;
+  const countTemplate = name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`;
   return (
-    `<a href="#${name}" class="main-navigation__item">${name}${isNumber}</a>`
+    `<a href="#${name}" class="main-navigation__item">${name}${countTemplate}</a>`
   );
 };
 
