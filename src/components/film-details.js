@@ -8,7 +8,7 @@ export const createFilmDetailsTemplate = (film) => {
   const director = film.director;
   const description = film.description;
   const commentsCount = film.commentsCount;
-  const raiting = film.raiting;
+  const rating = film.rating;
   const comments = film.comments;
   const commentsTemplate = createCommentsTemplate(comments);
   const movieDuration = film.movieDuration;
@@ -36,7 +36,7 @@ export const createFilmDetailsTemplate = (film) => {
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${raiting}</p>
+                  <p class="film-details__total-rating">${rating}</p>
                 </div>
               </div>
 

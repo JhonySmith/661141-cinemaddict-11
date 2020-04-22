@@ -36,7 +36,7 @@ const generateDescriptoin = (texts) => {
 const generateFilmCardData = () => {
   const title = getRandomArrElement(titles);
   const originalTitle = getRandomArrElement(titles);
-  const raiting = (Math.floor(Math.random() * 100)) / 10;
+  const rating = (Math.floor(Math.random() * 100)) / 10;
   const movieDuration = getRandomNumer(1, 2) + `h ` + getRandomNumer(0, 59) + `m`;
   const director = getRandomArrElement(directors);
   const genre = getRandomArrElement(genres);
@@ -44,25 +44,25 @@ const generateFilmCardData = () => {
   const comments = generateCommentsArr(getRandomNumer(1, 5));
   const poster = getRandomArrElement(posters);
   const description = generateDescriptoin(descriptions);
-  const isWatchList = Math.random() > 0.5;
-  const isWatched = Math.random() > 0.5;
-  const isFavorite = Math.random() > 0.5;
+  const inWatchList = Math.random() > 0.5;
+  const viewed = Math.random() > 0.5;
+  const inFavoriteList = Math.random() > 0.5;
   const ageRaiting = getRandomNumer(0, 18) + `+`;
 
 
   return {
     title,
     originalTitle,
-    raiting,
+    rating,
     movieDuration,
     director,
     genre,
     screenwriter,
     poster,
     description,
-    isWatchList,
-    isWatched,
-    isFavorite,
+    inWatchList,
+    viewed,
+    inFavoriteList,
     comments,
     ageRaiting,
   };
