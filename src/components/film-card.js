@@ -8,7 +8,7 @@ export const createFilmCardTemlate = (film) => {
   const inWatchList = film.inWatchList;
   const viewed = film.viewed;
   const inFavouriteList = film.inFavouriteList;
-  const rating = film.raiting;
+  const rating = film.rating;
 
   return (
     `<article class="film-card">
