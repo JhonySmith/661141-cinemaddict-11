@@ -1,12 +1,15 @@
 import {createFilmCardTemlate} from "./components/film-card";
-import {createFilmDeatilsTemplate} from "./components/film-details";
+import {createFilmDetailsTemplate} from "./components/film-details";
 import {createFilmsListTemlate} from "./components/films-list";
 import {createMainMenuTemplate} from "./components/main-menu";
 import {createProfileTemplate} from "./components/profile";
 import {createShowMoreButtonTemlate} from "./components/show-more-button";
 import {createSortMenuTemplate} from "./components/sort-menu";
+import {generateFilmCards} from "./mock/film";
+import {generateFilters} from "./mock/filter-menu";
 
-const FILMS_NUMER = 5;
+const FILMS_NUMBER = 20;
+const FILMS_NUMBER_STEP = 5;
 const SUB_FILMS_NUMBER = 2;
 
 // Функция вставки объекта на страницу
@@ -19,9 +22,14 @@ const pageHeader = document.querySelector(`.header`);
 // Блок main
 const pageMain = document.querySelector(`.main`);
 
+const films = generateFilmCards(FILMS_NUMBER);
+const filters = generateFilters(films);
+const topRatedFilms = films.slice().sort((a, b) => b.raiting - a.raiting);
+const mostCommentFilms = films.slice().sort((a, b) => b.commentsCount - a.commentsCount);
+
 // Отрисовка элементов на странице
 renderBlock(pageHeader, createProfileTemplate());
-renderBlock(pageMain, createMainMenuTemplate());
+renderBlock(pageMain, createMainMenuTemplate(filters));
 renderBlock(pageMain, createSortMenuTemplate());
 renderBlock(pageMain, createFilmsListTemlate());
 
@@ -32,25 +40,28 @@ const mainFilmsBlock = filmsSection.querySelector(`.films-list`);
 // Список всех 3х блоков
 const filmsLists = filmsSection.querySelectorAll(`.films-list__container`);
 // Завденеие блоков в отдельные переменыне
-const [mainFilmList, topRatedFilms, mostCommentedFilms] = filmsLists;
+const [mainFilmList, topRatedFilmsBlock, mostCommentedFilmsBlock] = filmsLists;
+
 
 // Отрисовка основных фильмов
-for (let i = 0; i < FILMS_NUMER; i++) {
-  renderBlock(mainFilmList, createFilmCardTemlate());
-}
+let showingFilmsCount = FILMS_NUMBER_STEP;
+
+films.slice(0, showingFilmsCount)
+  .forEach((film) => renderBlock(mainFilmList, createFilmCardTemlate(film), `beforeend`));
 
 // Отрисовка кнпоки показать еще
 renderBlock(mainFilmsBlock, createShowMoreButtonTemlate());
 
 // Отрисовка просматриваемых и комментируемых фильмов
-for (let i = 0; i < SUB_FILMS_NUMBER; i++) {
-  renderBlock(topRatedFilms, createFilmCardTemlate());
-  renderBlock(mostCommentedFilms, createFilmCardTemlate());
-}
+topRatedFilms.slice(0, SUB_FILMS_NUMBER)
+  .forEach((film) => renderBlock(topRatedFilmsBlock, createFilmCardTemlate(film)));
+
+mostCommentFilms.slice(0, SUB_FILMS_NUMBER)
+  .forEach((film) => renderBlock(mostCommentedFilmsBlock, createFilmCardTemlate(film)));
 
 const pageFooter = document.querySelector(`.footer`);
 // Отрисовка карточки фильма
-renderBlock(pageFooter, createFilmDeatilsTemplate(), `afterend`);
+renderBlock(pageFooter, createFilmDetailsTemplate(films[0]), `afterend`);
 
 // Временный блок
 const popup = document.querySelector(`.film-details`);
@@ -60,3 +71,17 @@ const onPopupClose = () => {
   popupCloseButton.removeEventListener(`click`, onPopupClose);
 };
 popupCloseButton.addEventListener(`click`, onPopupClose);
+
+const loadMoreButton = document.querySelector(`.films-list__show-more`);
+
+loadMoreButton.addEventListener(`click`, () => {
+  const prevFilmsCount = showingFilmsCount;
+  showingFilmsCount = showingFilmsCount + FILMS_NUMBER_STEP;
+
+  films.slice(prevFilmsCount, showingFilmsCount)
+    .forEach((film) => renderBlock(mainFilmList, createFilmCardTemlate(film), `beforeend`));
+
+  if (showingFilmsCount >= films.length) {
+    loadMoreButton.remove();
+  }
+});
