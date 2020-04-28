@@ -27,14 +27,14 @@ const renderFilmCard = (filmCardElement, film) => {
   const filmDetailComponent = new FilmDetailsComponent(film);
   const closeFilmDetailButton = filmDetailComponent.getElement().querySelector(`.film-details__close-btn`);
 
-  const onCloseFilmDetailButton = () => {
+  const onFilmDetailClose = () => {
     pageBody.removeChild(filmDetailComponent.getElement());
-    closeFilmDetailButton.removeEventListener(`click`, onCloseFilmDetailButton);
+    closeFilmDetailButton.removeEventListener(`click`, onFilmDetailClose);
   };
 
   const onFilmCardClick = () => {
     pageBody.appendChild(filmDetailComponent.getElement());
-    closeFilmDetailButton.addEventListener(`click`, onCloseFilmDetailButton);
+    closeFilmDetailButton.addEventListener(`click`, onFilmDetailClose);
   };
 
   filmCardComponent.getElement().addEventListener(`click`, onFilmCardClick);
