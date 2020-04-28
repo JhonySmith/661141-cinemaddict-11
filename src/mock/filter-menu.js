@@ -3,9 +3,9 @@ const FILTER_TITLES = [`All movies`, `Watchlist`, `History`, `Favorites`];
 const generateFilters = (films) => {
   const filterCaptions = [
     ``,
-    (films.filter((object) => object.isWatchList)).length,
-    (films.filter((object) => object.isWatched)).length,
-    (films.filter((object) => object.isFavorite)).length
+    (films.filter((object) => object.inWatchList)).length,
+    (films.filter((object) => object.viewed)).length,
+    (films.filter((object) => object.inFavoriteList)).length
   ];
 
   return FILTER_TITLES.map((it, i) => {

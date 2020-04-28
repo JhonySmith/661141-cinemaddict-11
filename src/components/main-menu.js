@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createFilterMarkup = (filter) => {
   const {name, count} = filter;
   const countTemplate = name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`;
@@ -7,7 +9,7 @@ const createFilterMarkup = (filter) => {
 };
 
 // Блок меню включая статистику
-export const createMainMenuTemplate = (filters) => {
+const createMainMenuTemplate = (filters) => {
   const filterMarkup = filters.map((it) => createFilterMarkup(it)).join(`\n`);
   return (
     `<nav class="main-navigation">
@@ -18,3 +20,27 @@ export const createMainMenuTemplate = (filters) => {
     </nav>`
   );
 };
+
+export default class MainMenu {
+  constructor(filters) {
+    this._filters = filters;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMainMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

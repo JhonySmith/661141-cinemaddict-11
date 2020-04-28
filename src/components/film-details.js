@@ -1,7 +1,8 @@
 import {createCommentsTemplate} from "./comments";
+import {createElement} from "../utils.js";
 // Карточка с деталями фильма
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const title = film.title;
   const originalTitle = film.originalTitle;
   const poster = film.poster;
@@ -133,3 +134,27 @@ export const createFilmDetailsTemplate = (film) => {
     </section>`
   );
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,5 +1,6 @@
-// Карточка фильма
-export const createFilmCardTemlate = (film) => {
+import {createElement} from "../utils.js";
+
+const createFilmCardTemlate = (film) => {
 
   const title = film.title;
   const poster = film.poster;
@@ -30,3 +31,27 @@ export const createFilmCardTemlate = (film) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemlate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
