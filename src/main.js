@@ -29,12 +29,21 @@ const renderFilmCard = (filmCardElement, film) => {
 
   const onFilmDetailClose = () => {
     pageBody.removeChild(filmDetailComponent.getElement());
+    document.removeEventListener(`keydown`, onEscKeyDown);
     closeFilmDetailButton.removeEventListener(`click`, onFilmDetailClose);
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscPress = (evt.key === `Ecs`) || (evt.key === `Escape`);
+    if (isEscPress) {
+      onFilmDetailClose();
+    }
   };
 
   const onFilmCardClick = () => {
     pageBody.appendChild(filmDetailComponent.getElement());
     closeFilmDetailButton.addEventListener(`click`, onFilmDetailClose);
+    document.addEventListener(`keydown`, onEscKeyDown);
   };
 
   filmCardComponent.getElement().addEventListener(`click`, onFilmCardClick);
