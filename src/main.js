@@ -12,6 +12,7 @@ import FilmsListContainerComponent from "./components/films-list-container";
 import FilmsComponent from "./components/films";
 import FilmsListTopRatedComponent from "./components/films-list-top-rated";
 import FilmsListMostCommentedComponent from "./components/films-list-most-commented";
+import NoFilmsComponent from "./components/no-films.js";
 
 const FILMS_NUMBER = 20;
 const FILMS_NUMBER_STEP = 5;
@@ -102,13 +103,19 @@ const renderFilmsListMostCommented = (filmsSection, films) => {
 const renderFilmsSection = (placeInDocument, films) => {
   const filmsBoard = new FilmsComponent().getElement();
   renderElement(placeInDocument, filmsBoard, RenderPosition.BEFOREEND);
-  renderFilmslist(filmsBoard, films);
 
-  const topRatedFilms = films.slice().sort((a, b) => b.rating - a.rating);
-  const mostCommentFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length);
+  if (films.length > 0) {
+    renderFilmslist(filmsBoard, films);
 
-  renderFilmsListTopRated(filmsBoard, topRatedFilms);
-  renderFilmsListMostCommented(filmsBoard, mostCommentFilms);
+    const topRatedFilms = films.slice().sort((a, b) => b.rating - a.rating);
+    const mostCommentFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length);
+
+    renderFilmsListTopRated(filmsBoard, topRatedFilms);
+    renderFilmsListMostCommented(filmsBoard, mostCommentFilms);
+  } else {
+    const noFilms = new NoFilmsComponent();
+    renderElement(filmsBoard, noFilms.getElement(), RenderPosition.BEFOREEND);
+  }
 };
 
 const pageHeader = document.querySelector(`.header`);
