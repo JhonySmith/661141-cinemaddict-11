@@ -10,16 +10,11 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`,
 };
 
-export const renderComponent = (placeInDocument, component, position) => {
-  switch (position) {
+export const renderComponent = (placeInDocument, component, position = RenderPosition.BEFOREEND) => {
+  if (position === RenderPosition.AFTERBEGIN) {
+    placeInDocument.prepend(component.getElement());
 
-    case RenderPosition.AFTERBEGIN:
-      placeInDocument.prepend(component.getElement());
-      break;
-
-    case RenderPosition.BEFOREEND:
-      placeInDocument.append(component.getElement());
-      break;
-
+  } else if (position === RenderPosition.BEFOREEND) {
+    placeInDocument.append(component.getElement());
   }
 };

@@ -7,7 +7,7 @@ import FilmsComponent from "./components/films";
 
 import {generateFilmCards} from "./mock/film";
 import {generateFilters} from "./mock/filter-menu";
-import {renderComponent, RenderPosition} from "./utils/render.js";
+import {renderComponent} from "./utils/render.js";
 
 const FILMS_NUMBER = 20;
 
@@ -17,14 +17,14 @@ const films = generateFilmCards(FILMS_NUMBER);
 const filters = generateFilters(films);
 
 
-renderComponent(pageHeader, new ProfileComponent(), RenderPosition.BEFOREEND);
-renderComponent(pageMain, new MainMenuComponent(filters), RenderPosition.BEFOREEND);
-renderComponent(pageMain, new SortMenuComponent(), RenderPosition.BEFOREEND);
+renderComponent(pageHeader, new ProfileComponent());
+renderComponent(pageMain, new MainMenuComponent(filters));
+renderComponent(pageMain, new SortMenuComponent());
 
 const filmsBoard = new FilmsComponent();
 const filmsBoardController = new FilmsBoardController(filmsBoard);
 
-renderComponent(pageMain, filmsBoard, RenderPosition.BEFOREEND);
+renderComponent(pageMain, filmsBoard);
 filmsBoardController.render(films);
 
 
