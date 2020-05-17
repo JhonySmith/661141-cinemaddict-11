@@ -6,3 +6,12 @@ export const getRandomArrElement = (arr) => {
   const randomIndex = getRandomNumer(0, arr.length);
   return arr[randomIndex];
 };
+
+export const getRandomDate = () => {
+  const date = new Date();
+
+  date.setDate(getRandomNumer(0, 31));
+  date.setFullYear(getRandomNumer(1950, 2019));
+
+  return date;
+};

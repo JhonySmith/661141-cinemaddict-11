@@ -7,7 +7,9 @@ import FilmsListTopRatedComponent from "../components/films-list-top-rated";
 import FilmsListMostCommentedComponent from "../components/films-list-most-commented";
 import NoFilmsComponent from "../components/no-films.js";
 
-import {renderComponent} from "../utils/render.js";
+import {renderComponent, remove} from "../utils/render.js";
+
+import SortMenu, {SortType} from "../components/sort-menu.js";
 
 const FILMS_NUMBER_STEP = 5;
 const SUB_FILMS_NUMBER = 2;
@@ -43,64 +45,125 @@ const renderFilmCard = (filmCardElement, film) => {
   filmCardComponent.setOnClick(onFilmCardClick);
 };
 
+const renderFilms = (films, filmsListElement, showFilmsCount, prevFilmsCount = 0) => {
+  films.slice(prevFilmsCount, showFilmsCount)
+    .forEach((film) => renderFilmCard(filmsListElement, film));
+};
+
+const getSortedFilms = (films, sortType) => {
+  let sortedFilms = [];
+  const copyOfFilms = [...films];
+
+  switch (sortType) {
+    case SortType.DATE:
+      sortedFilms = copyOfFilms.sort((a, b) => b.releaseDate - a.releaseDate);
+      break;
+    case SortType.RATING:
+      sortedFilms = copyOfFilms.sort((a, b) => b.rating - a.rating);
+      break;
+    default:
+      sortedFilms = copyOfFilms;
+      break;
+  }
+  return sortedFilms;
+
+};
 
 export default class FilmsBoardController {
   constructor(container) {
     this._container = container;
 
     this._filmsListComponent = new FilmListComponent();
-    this._loadMoreButtonComponent = new ShowMoreButtonComponent();
     this._filmsListTopRatedComponent = new FilmsListTopRatedComponent();
     this._filmsListMostCommentedComponent = new FilmsListMostCommentedComponent();
+
+    this._mainFilmsContainer = new FilmsListContainerComponent();
+    this._topRatedFilmsContainer = new FilmsListContainerComponent();
+    this._mostCommentFilmsContainer = new FilmsListContainerComponent();
+
+    this._loadMoreButtonComponent = new ShowMoreButtonComponent();
+
     this._noFilmsComponent = new NoFilmsComponent();
+
+    this._sortMenu = new SortMenu();
   }
 
   render(films) {
+
     const container = this._container.getElement();
+    const loadMoreButton = this._loadMoreButtonComponent;
 
     if (films.length) {
 
-      renderComponent(container, this._filmsListComponent);
-
-      const mainFilmsContainer = new FilmsListContainerComponent();
-
-      films.slice(0, FILMS_NUMBER_STEP)
-      .forEach((film) => renderFilmCard(mainFilmsContainer.getElement(), film));
-
-      renderComponent(this._filmsListComponent.getElement(), mainFilmsContainer);
-      renderComponent(this._filmsListComponent.getElement(), this._loadMoreButtonComponent);
-
-      let showFilmsCount = FILMS_NUMBER_STEP;
-      this._loadMoreButtonComponent.setOnClick(() => {
-        const prevFilmsCount = showFilmsCount;
-        showFilmsCount = showFilmsCount + FILMS_NUMBER_STEP;
-
-        films.slice(prevFilmsCount, showFilmsCount)
-        .forEach((film) => renderFilmCard(mainFilmsContainer.getElement(), film));
+      const renderLoadMoreButton = () => {
 
         if (showFilmsCount >= films.length) {
-          this._loadMoreButtonComponent.getElement().remove();
-          this._loadMoreButtonComponent.removeElement();
+          return;
         }
-      });
+
+        renderComponent(filmsList, loadMoreButton);
+
+        loadMoreButton.setOnClick(() => {
+          const prevFilmsCount = showFilmsCount;
+          showFilmsCount = showFilmsCount + FILMS_NUMBER_STEP;
+
+          const sortedFilms = getSortedFilms(films, this._sortMenu.getSortType());
+
+          renderFilms(sortedFilms, mainFilmsContainer.getElement(), showFilmsCount, prevFilmsCount);
+
+          if (showFilmsCount >= films.length) {
+            loadMoreButton.getElement().remove();
+            loadMoreButton.removeElement();
+          }
+        });
+      };
+
+      renderComponent(container, this._sortMenu);
+      renderComponent(container, this._filmsListComponent);
+
+      const mainFilmsContainer = this._mainFilmsContainer;
+
+      renderFilms(films, mainFilmsContainer.getElement(), FILMS_NUMBER_STEP);
+
+      renderComponent(this._filmsListComponent.getElement(), mainFilmsContainer);
 
       renderComponent(container, this._filmsListTopRatedComponent);
 
-      const topRatedFilmsContainer = new FilmsListContainerComponent();
-      const topRatedFilms = films.slice().sort((a, b) => b.rating - a.rating);
 
-      topRatedFilms.slice(0, SUB_FILMS_NUMBER)
-      .forEach((film) => renderFilmCard(topRatedFilmsContainer.getElement(), film));
-      renderComponent(this._filmsListTopRatedComponent.getElement(), topRatedFilmsContainer);
+      const topRatedFilms = films.slice().sort((a, b) => b.rating - a.rating);
+      const topRatedFilmsContainer = this._topRatedFilmsContainer.getElement();
+
+      renderFilms(topRatedFilms, topRatedFilmsContainer, SUB_FILMS_NUMBER);
+
+      renderComponent(this._filmsListTopRatedComponent.getElement(), this._topRatedFilmsContainer);
 
       renderComponent(container, this._filmsListMostCommentedComponent);
 
-      const mostCommentFilmsContainer = new FilmsListContainerComponent();
-      const mostCommentFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length);
 
-      mostCommentFilms.slice(0, SUB_FILMS_NUMBER)
-      .forEach((film) => renderFilmCard(mostCommentFilmsContainer.getElement(), film));
-      renderComponent(this._filmsListMostCommentedComponent.getElement(), mostCommentFilmsContainer);
+      const mostCommentFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length);
+      const mostCommentFilmsContainer = this._mostCommentFilmsContainer.getElement();
+      renderFilms(mostCommentFilms, mostCommentFilmsContainer, SUB_FILMS_NUMBER);
+      renderComponent(this._filmsListMostCommentedComponent.getElement(), this._mostCommentFilmsContainer);
+
+      let showFilmsCount = FILMS_NUMBER_STEP;
+
+      const filmsList = this._filmsListComponent.getElement();
+
+      renderLoadMoreButton();
+
+      this._sortMenu.setSortTypeChangeClick((sortType) => {
+        showFilmsCount = FILMS_NUMBER_STEP;
+
+        const sortedFilms = getSortedFilms(films, sortType);
+
+        mainFilmsContainer.getElement().innerHTML = ``;
+
+        renderFilms(sortedFilms, mainFilmsContainer.getElement(), showFilmsCount);
+        remove(this._loadMoreButtonComponent);
+
+        renderLoadMoreButton();
+      });
+
     } else {
       renderComponent(container, this._noFilmsComponent);
     }
