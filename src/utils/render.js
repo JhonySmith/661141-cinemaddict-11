@@ -18,3 +18,8 @@ export const renderComponent = (placeInDocument, component, position = RenderPos
     placeInDocument.append(component.getElement());
   }
 };
+
+export const remove = (component) => {
+  component.getElement().remove();
+  component.removeElement();
+};

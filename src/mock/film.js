@@ -1,4 +1,4 @@
-import {getRandomNumer, getRandomArrElement} from "../utils.js";
+import {getRandomNumer, getRandomArrElement, getRandomDate} from "../utils.js";
 import {generateCommentsArr} from "./comments";
 
 const titles = [`The Dance of life`, `Sagebrush Trail`, `The Man with the Golden Arm`];
@@ -48,6 +48,7 @@ const generateFilmCardData = () => {
   const viewed = Math.random() > 0.5;
   const inFavoriteList = Math.random() > 0.5;
   const ageRaiting = getRandomNumer(0, 18) + `+`;
+  const releaseDate = getRandomDate();
 
 
   return {
@@ -65,6 +66,7 @@ const generateFilmCardData = () => {
     inFavoriteList,
     comments,
     ageRaiting,
+    releaseDate,
   };
 };
 
