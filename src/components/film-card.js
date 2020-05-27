@@ -33,7 +33,7 @@ const createFilmCardTemlate = (film) => {
   );
 };
 
-export default class FilmCard extends AbstractClass {
+export default class FilmCardComponent extends AbstractClass {
   constructor(film) {
     super();
 
@@ -45,6 +45,33 @@ export default class FilmCard extends AbstractClass {
   }
 
   setOnClick(onObjectClick) {
-    this.getElement().addEventListener(`click`, onObjectClick);
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onObjectClick);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onObjectClick);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onObjectClick);
+  }
+
+  onFilmCardAddWatchListClick(onObjectClick) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+    .addEventListener(`click`, onObjectClick);
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, () => {
+      this._inWatchList = !this._inWatchList;
+
+      this.rerender();
+    });
+  }
+
+  onFilmCardMarkAsWatchedClick(onObjectClick) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
+    .addEventListener(`click`, onObjectClick);
+  }
+
+  onFilmCardAddToFavoriteClick(onObjectClick) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
+    .addEventListener(`click`, onObjectClick);
   }
 }
