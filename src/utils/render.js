@@ -32,7 +32,7 @@ export const replace = (newComponent, oldComponent) => {
   const isExistElements = !!(parentElement && newElement && oldElement);
 
   if (isExistElements && parentElement.contains(oldElement)) {
-    const { scrollTop, scrollLeft } = oldElement;
+    const {scrollTop, scrollLeft} = oldElement;
 
     parentElement.replaceChild(newElement, oldElement);
 
