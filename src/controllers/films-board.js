@@ -139,7 +139,7 @@ export default class FilmsBoardController {
     const topRatedFilms = getSortedFilms(this._films, SortType.RATING);
     const topRatedFilmsContainer = this._topRatedFilmsContainer.getElement();
 
-    renderFilms(topRatedFilms, topRatedFilmsContainer, this._onDataChange, SUB_FILMS_NUMBER);
+    renderFilms(topRatedFilms, topRatedFilmsContainer, this._onDataChange, this._onViewChange, SUB_FILMS_NUMBER);
 
     renderComponent(this._filmsListTopRatedComponent.getElement(), this._topRatedFilmsContainer);
   }
