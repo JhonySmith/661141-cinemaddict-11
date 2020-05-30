@@ -8,11 +8,15 @@ import {generateFilmCards} from "./mock/film";
 import {generateFilters} from "./mock/filter-menu";
 import {renderComponent} from "./utils/render.js";
 
+import FilmsModel from "./models/films.js";
+
 const FILMS_NUMBER = 20;
 
 const pageHeader = document.querySelector(`.header`);
 const pageMain = document.querySelector(`.main`);
 const films = generateFilmCards(FILMS_NUMBER);
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(films);
 const filters = generateFilters(films);
 
 
@@ -20,7 +24,7 @@ renderComponent(pageHeader, new ProfileComponent());
 renderComponent(pageMain, new MainMenuComponent(filters));
 
 const filmsBoard = new FilmsComponent();
-const filmsBoardController = new FilmsBoardController(filmsBoard);
+const filmsBoardController = new FilmsBoardController(filmsBoard, filmsModel);
 
 renderComponent(pageMain, filmsBoard);
 filmsBoardController.render(films);

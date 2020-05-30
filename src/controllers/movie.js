@@ -76,19 +76,19 @@ export default class MovieController {
   }
 
   _onWatchList() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       inWatchList: !this._film.inWatchList,
     }));
   }
 
   _onMarkAsWatched() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       viewed: !this._film.viewed,
     }));
   }
 
   _onFavourite() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       inFavouriteList: !this._film.inFavouriteList,
     }));
   }
