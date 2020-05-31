@@ -70,6 +70,9 @@ export default class FilmsBoardController {
     this._sortMenu.setSortTypeChangeClick(this._onSortTypeChange);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+
+    this._filmsModel.setOnFilterChange(this._onFilterChange);
   }
 
   render() {
@@ -90,6 +93,11 @@ export default class FilmsBoardController {
     } else {
       renderComponent(container, this._noFilmsComponent);
     }
+  }
+
+  _removeFilms() {
+    this._showedFilmsController.forEach((filmController) => filmController.destroy());
+    this._showedFilmsController = [];
   }
 
   _renderFilms(films) {
@@ -144,6 +152,12 @@ export default class FilmsBoardController {
     });
   }
 
+  _updateFilms(count) {
+    this._removeFilms();
+    this._renderFilms(this._filmsModel.getFilms().slice(0, count));
+    this._renderLoadMoreButton();
+  }
+
   _onDataChange(filmController, oldData, newData) {
     const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
 
@@ -170,5 +184,9 @@ export default class FilmsBoardController {
 
   _onViewChange() {
     this._showedFilmsController.forEach((it) => it.setDefaultView());
+  }
+
+  _onFilterChange() {
+    this._updateFilms(FILMS_NUMBER_STEP);
   }
 }

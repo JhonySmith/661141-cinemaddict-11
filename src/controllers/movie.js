@@ -50,6 +50,12 @@ export default class MovieController {
     }
   }
 
+  destroy() {
+    remove(this._filmCardComponent);
+    remove(this._filmDetailsComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
   _getFilmCard(film) {
     const filmCard = new FilmCardComponent(film);
 

@@ -1,5 +1,5 @@
 import MainMenu from "../components/main-menu.js";
-import {renderSection, replace} from "../utils/render.js";
+import {renderComponent, replace} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
 
 import {FilterType} from "../const.js";
@@ -20,7 +20,7 @@ export default class FilterControl {
 
   render() {
     const container = this._container;
-    const allFilms = this._filmsModel.getFilms();
+    const allFilms = this._filmsModel.getFilmsAll();
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
@@ -29,14 +29,13 @@ export default class FilterControl {
       };
     });
     const oldComponent = this._filterComponent;
-
     this._filterComponent = new MainMenu(filters);
     this._filterComponent.onFilterClick(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
     } else {
-      renderSection(container, this._filterComponent);
+      renderComponent(container, this._filterComponent);
     }
   }
 
