@@ -23,6 +23,7 @@ const getRandomDate = () => {
 
 const generateComment = () => {
   return {
+    id: String(Math.random()),
     authorName: getRandomArrElement(authorNames),
     emotion: getRandomArrElement(emotions),
     commentText: getRandomArrElement(comments),
@@ -36,4 +37,4 @@ const generateCommentsArr = (count) => {
     .map(generateComment);
 };
 
-export {generateComment, generateCommentsArr};
+export {generateComment, generateCommentsArr, getRandomDate};

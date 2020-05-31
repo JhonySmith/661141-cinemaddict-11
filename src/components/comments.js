@@ -3,9 +3,10 @@ const createCommentMarkup = (comment) => {
   const emotion = comment.emotion;
   const commentText = comment.commentText;
   const date = comment.date;
+  const id = comment.id;
 
   return (
-    `<li class="film-details__comment">
+    `<li class="film-details__comment" id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>

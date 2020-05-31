@@ -25,7 +25,6 @@ export default class Films {
 
   setFilter(filterType) {
     this._activeFilterType = filterType;
-    console.log(this._onFilterChanges);
     this._callEvents(this._onFilterChanges);
   }
 
