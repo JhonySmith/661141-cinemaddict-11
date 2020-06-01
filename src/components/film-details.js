@@ -1,8 +1,10 @@
 import {createCommentsTemplate} from "./comments";
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {getRandomDate} from "../mock/comments";
+import {getRandomCommentDate} from "../utils.js";
 import {encode} from "he";
 // Карточка с деталями фильма
+
+const YOUR_COMMENT = `You`;
 
 const createFilmDetailsTemplate = (film, commentEmoji) => {
   const title = film.title;
@@ -204,7 +206,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     .forEach((delButton) => {
       delButton.addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        const commentId = evt.target.closest(`li`).id;
+        const commentId = evt.target.closest(`li`).dataset.id;
         onClick(commentId);
       });
     });
@@ -217,8 +219,8 @@ export default class FilmDetails extends AbstractSmartComponent {
       id: String(Math.random()),
       emotion: this.commentEmoji,
       commentText: encode(form.value),
-      authorName: `you`,
-      date: getRandomDate(),
+      authorName: YOUR_COMMENT,
+      date: getRandomCommentDate(),
     };
   }
 

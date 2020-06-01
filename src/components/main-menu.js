@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 const FILTER_ID_PREFIX = `filter__`;
 
 const getFilterNameById = (id) => {
-  return id.substring(FILTER_ID_PREFIX.length);
+  return id.replace(`${FILTER_ID_PREFIX}`, ``);
 };
 
 const createFilterMarkup = (filter, isChecked) => {

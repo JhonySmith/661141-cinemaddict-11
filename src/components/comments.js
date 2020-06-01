@@ -6,7 +6,7 @@ const createCommentMarkup = (comment) => {
   const id = comment.id;
 
   return (
-    `<li class="film-details__comment" id="${id}">
+    `<li class="film-details__comment" data-id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>

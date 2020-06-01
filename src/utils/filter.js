@@ -13,19 +13,16 @@ export const getFavouriteFilms = (films) => {
 };
 
 export const getFilmsByFilter = (films, filterType) => {
-
   switch (filterType) {
-    case FilterType.ALL:
-      return films;
     case FilterType.WATCHLIST:
       return getFilmsInWatchList(films);
     case FilterType.HISTORY:
       return getWatchedFilms(films);
     case FilterType.FAVORITES:
       return getFavouriteFilms(films);
+    default:
+      return films;
   }
-
-  return films;
 };
 
 
