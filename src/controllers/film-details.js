@@ -1,7 +1,7 @@
 import FilmDetails from "../components/film-details.js";
 import CommentsController from "../controllers/comments.js";
 import CommentsModel from "../models/comments";
-import {renderComponent, remove, RenderPosition, replace} from "../utils/render.js";
+import {renderComponent, remove} from "../utils/render.js";
 
 export default class FilmDetailsController {
   constructor(onDataChange, onViewChange, api, movieController) {

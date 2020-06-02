@@ -1,5 +1,5 @@
 import CommentsComponent from "../components/comments.js";
-import {renderComponent, remove, RenderPosition, replace} from "../utils/render.js";
+import {renderComponent} from "../utils/render.js";
 
 export default class Comments {
   constructor(container, onDataChange, movieController) {

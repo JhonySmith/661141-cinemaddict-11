@@ -93,7 +93,7 @@ export default class CommentsComponent extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-    this.setDelelteClick(this._onCommentDeleteClick)
+    this.setDelelteClick(this._onCommentDeleteClick);
   }
 
 

@@ -1,5 +1,4 @@
 import FilmCardComponent from "../components/film-card";
-import FilmDetailsComponent from "../components/film-details";
 import FilmModel from "../models/film.js";
 import FilmDetailsController from "../controllers/film-details.js";
 import CommentsModel from "../models/comments";
