@@ -50,6 +50,12 @@ export default class MovieController {
     }
   }
 
+  destroy() {
+    remove(this._filmCardComponent);
+    remove(this._filmDetailsComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
   _getFilmCard(film) {
     const filmCard = new FilmCardComponent(film);
 
@@ -76,19 +82,19 @@ export default class MovieController {
   }
 
   _onWatchList() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       inWatchList: !this._film.inWatchList,
     }));
   }
 
   _onMarkAsWatched() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       viewed: !this._film.viewed,
     }));
   }
 
   _onFavourite() {
-    this._onDataChange(this._film, Object.assign({}, this._film, {
+    this._onDataChange(this, this._film, Object.assign({}, this._film, {
       inFavouriteList: !this._film.inFavouriteList,
     }));
   }
@@ -120,7 +126,35 @@ export default class MovieController {
       this._onFavourite();
     });
 
+    filmDetailsComponent.setOnDeleteCommentClick((commentId) => {
+      const newFilm = this._removeComment(film, commentId);
+
+      this._onDataChange(this, film, newFilm);
+    });
+
+    filmDetailsComponent.setAddCommentSubmit(() => {
+      const newComment = this._filmDetailsComponent.getCommentDataFromForm();
+
+      const updatedFilm = this._addComment(film, newComment);
+
+      this._onDataChange(this, film, updatedFilm);
+    });
+
     return filmDetailsComponent;
+  }
+
+  _removeComment(film, commentId) {
+    const newFilm = Object.assign({}, film);
+    newFilm.comments = newFilm.comments.filter(({id}) => id !== commentId);
+
+    return newFilm;
+  }
+
+  _addComment(film, comment) {
+    const newFilm = Object.assign({}, film);
+    newFilm.comments = [...newFilm.comments, comment];
+
+    return newFilm;
   }
 
   _closeFilmDetails() {

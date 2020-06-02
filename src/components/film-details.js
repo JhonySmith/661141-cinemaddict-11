@@ -1,6 +1,10 @@
 import {createCommentsTemplate} from "./comments";
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {getRandomCommentDate} from "../utils.js";
+import {encode} from "he";
 // Карточка с деталями фильма
+
+const YOUR_COMMENT = `You`;
 
 const createFilmDetailsTemplate = (film, commentEmoji) => {
   const title = film.title;
@@ -151,6 +155,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._onAddWatchListClick = null;
     this._onAddToFavoriteClick = null;
     this._onMarkAsWatchedClick = null;
+    this._onCommentDeleteClick = null;
+    this._onCommentSubmit = null;
     this.commentEmoji = null;
     this._subscribeOnEvents();
   }
@@ -164,6 +170,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setOnDetailsInWatchListClick(this._onAddWatchListClick);
     this.setOnDetailsIAddToFavoriteClick(this._onAddToFavoriteClick);
     this.setOnDetailsMarkAsWatchedClick(this._onMarkAsWatchedClick);
+    this.setOnDeleteCommentClick(this._onCommentDeleteClick);
+    this.setAddCommentSubmit(this._onCommentSubmit);
     this._subscribeOnEvents();
   }
 
@@ -191,6 +199,50 @@ export default class FilmDetails extends AbstractSmartComponent {
   setOnDetailsMarkAsWatchedClick(onClick) {
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, onClick);
     this._onMarkAsWatchedClick = onClick;
+  }
+
+  setOnDeleteCommentClick(onClick) {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+    .forEach((delButton) => {
+      delButton.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        const commentId = evt.target.closest(`li`).dataset.id;
+        onClick(commentId);
+      });
+    });
+
+    this._onCommentDeleteClick = onClick;
+  }
+
+  _parseCommentData(form) {
+    return {
+      id: String(Math.random()),
+      emotion: this.commentEmoji,
+      commentText: encode(form.value),
+      authorName: YOUR_COMMENT,
+      date: getRandomCommentDate(),
+    };
+  }
+
+  getCommentDataFromForm() {
+    const form = this.getElement().querySelector(`.film-details__comment-input`);
+    const formData = this._parseCommentData(form);
+
+    return formData;
+  }
+
+  setAddCommentSubmit(onSubmit) {
+    this.getElement().querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, (evt) => {
+        const subKeys = evt.ctrlKey || evt.metaKey;
+        const enterKey = evt.key === `Enter`;
+
+        if (subKeys && enterKey) {
+          onSubmit();
+        }
+      });
+
+    this._onCommentSubmit = onSubmit;
   }
 
   _subscribeOnEvents() {
