@@ -8,7 +8,7 @@ const createFilmCardTemlate = (film) => {
   const commentsCount = film.comments.length;
   const inWatchList = film.inWatchList;
   const viewed = film.viewed;
-  const inFavouriteList = film.inFavouriteList;
+  const inFavoriteList = film.inFavoriteList;
   const rating = film.rating;
   const releaseDate = film.releaseDate.toLocaleString(`en-US`, {year: `numeric`});
 
@@ -21,13 +21,13 @@ const createFilmCardTemlate = (film) => {
             <span class="film-card__duration">1h 55m</span>
             <span class="film-card__genre">Musical</span>
           </p>
-          <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+          <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description}</p>
           <a class="film-card__comments">${commentsCount} comments</a>
           <form class="film-card__controls">
             <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inWatchList ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
             <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${viewed ? `film-card__controls-item--active` : ``}">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite ${inFavouriteList ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite ${inFavoriteList ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
           </form>
     </article>`
   );
@@ -53,16 +53,6 @@ export default class FilmCardComponent extends AbstractClass {
   onFilmCardAddWatchListClick(onObjectClick) {
     this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
     .addEventListener(`click`, onObjectClick);
-  }
-
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    element.querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, () => {
-      this._inWatchList = !this._inWatchList;
-
-      this.rerender();
-    });
   }
 
   onFilmCardMarkAsWatchedClick(onObjectClick) {

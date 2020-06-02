@@ -13,10 +13,10 @@ import SortMenu, {SortType} from "../components/sort-menu.js";
 const FILMS_NUMBER_STEP = 5;
 const SUB_FILMS_NUMBER = 2;
 
-const renderFilms = (films, filmsListElement, onDataChange, onViewChange) => {
+const renderFilms = (films, filmsListElement, onDataChange, onViewChange, api) => {
   return films
     .map((film) => {
-      const movieController = new MovieController(filmsListElement, onDataChange, onViewChange);
+      const movieController = new MovieController(filmsListElement, onDataChange, onViewChange, api);
 
       movieController.render(film);
 
@@ -44,9 +44,10 @@ const getSortedFilms = (films, sortType) => {
 };
 
 export default class FilmsBoardController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._filmsListComponent = new FilmListComponent();
     this._filmsListTopRatedComponent = new FilmsListTopRatedComponent();
@@ -103,7 +104,7 @@ export default class FilmsBoardController {
     const mainFilmsContainer = this._mainFilmsContainer;
     renderComponent(this._filmsListComponent.getElement(), mainFilmsContainer);
 
-    const newFilms = renderFilms(films, mainFilmsContainer.getElement(), this._onDataChange, this._onViewChange, FILMS_NUMBER_STEP);
+    const newFilms = renderFilms(films, mainFilmsContainer.getElement(), this._onDataChange, this._onViewChange, this._api);
     this._showedFilmsController = this._showedFilmsController.concat(newFilms);
     this._showingFilmsCount = this._showedFilmsController.length;
 
@@ -116,7 +117,7 @@ export default class FilmsBoardController {
     const topRatedFilms = getSortedFilms(films, SortType.RATING).slice(0, SUB_FILMS_NUMBER);
     const topRatedFilmsContainer = this._topRatedFilmsContainer.getElement();
 
-    renderFilms(topRatedFilms, topRatedFilmsContainer, this._onDataChange, this._onViewChange);
+    renderFilms(topRatedFilms, topRatedFilmsContainer, this._onDataChange, this._onViewChange, this._api);
     renderComponent(this._filmsListTopRatedComponent.getElement(), this._topRatedFilmsContainer);
   }
 
@@ -126,7 +127,7 @@ export default class FilmsBoardController {
     const mostCommentFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length).slice(0, SUB_FILMS_NUMBER);
     const mostCommentFilmsContainer = this._mostCommentFilmsContainer.getElement();
 
-    renderFilms(mostCommentFilms, mostCommentFilmsContainer, this._onDataChange, this._onViewChange);
+    renderFilms(mostCommentFilms, mostCommentFilmsContainer, this._onDataChange, this._onViewChange, this._api);
     renderComponent(this._filmsListMostCommentedComponent.getElement(), this._mostCommentFilmsContainer);
   }
 
@@ -163,11 +164,15 @@ export default class FilmsBoardController {
   }
 
   _onDataChange(filmController, oldData, newData) {
-    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
+    this._api.updateFilm(oldData.id, newData)
+      .then((filmModel) => {
+        const isSuccess = this._filmsModel.updateFilm(oldData.id, filmModel);
 
-    if (isSuccess) {
-      filmController.render(newData);
-    }
+        if (isSuccess) {
+          filmController.render(filmModel);
+          this._updateFilms(this._showingFilmsCount);
+        }
+      });
   }
 
   _onSortTypeChange(sortType) {

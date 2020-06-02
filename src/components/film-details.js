@@ -1,4 +1,3 @@
-import {createCommentsTemplate} from "./comments";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomCommentDate} from "../utils.js";
 import {encode} from "he";
@@ -6,22 +5,31 @@ import {encode} from "he";
 
 const YOUR_COMMENT = `You`;
 
-const createFilmDetailsTemplate = (film, commentEmoji) => {
-  const title = film.title;
+const createGenreTemplate = (genre) => {
+  const genresTemplate = genre
+    .map((it) => `<span class="film-details__genre">${it}</span>`)
+    .join(`\n`);
+
+  return genresTemplate;
+};
+
+const createFilmDetailsTemplate = (film) => {
+  const actors = film.actors;
+  const ageRaiting = film.ageRaiting;
+  const description = film.description;
+  const director = film.director;
+  const genre = createGenreTemplate(film.genre);
+  const inFavoriteList = film.inFavoriteList ? `checked` : ``;
+  const inWatchList = film.inWatchList ? `checked` : ``;
+  const movieDuration = film.movieDuration;
   const originalTitle = film.originalTitle;
   const poster = film.poster;
-  const director = film.director;
-  const description = film.description;
-  const commentsCount = film.commentsCount;
   const rating = film.rating;
-  const comments = film.comments;
-  const commentsTemplate = createCommentsTemplate(comments);
-  const movieDuration = film.movieDuration;
-  const screenwriter = film.screenwriter;
+  const releaseCountry = film.releaseCountry;
+  const releaseDate = film.releaseDate;
+  const screenwriters = film.screenwriters;
+  const title = film.title;
   const viewed = film.viewed ? `checked` : ``;
-  const inFavouriteList = film.inFavouriteList ? `checked` : ``;
-  const inWatchList = film.inWatchList ? `checked` : ``;
-  const emojiMarkup = commentEmoji ? `<img src="./images/emoji/${commentEmoji}.png" alt="${commentEmoji}" width="55" height="55">` : ` `;
 
   return (
     `<section class="film-details">
@@ -32,9 +40,8 @@ const createFilmDetailsTemplate = (film, commentEmoji) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
-
-              <p class="film-details__age">18+</p>
+              <img class="film-details__poster-img" src="${poster}" alt="${title} - film poster">
+              <p class="film-details__age">${ageRaiting}+</p>
             </div>
 
             <div class="film-details__info">
@@ -51,20 +58,20 @@ const createFilmDetailsTemplate = (film, commentEmoji) => {
 
               <table class="film-details__table">
                 <tr class="film-details__row">
-                  <td class="film-details__term">${director}</td>
-                  <td class="film-details__cell">Anthony Mann</td>
+                  <td class="film-details__term">Director</td>
+                  <td class="film-details__cell">${director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${screenwriter}</td>
+                  <td class="film-details__cell">${screenwriters}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+                  <td class="film-details__cell">${actors}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">30 March 1945</td>
+                  <td class="film-details__cell">${releaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
@@ -72,14 +79,12 @@ const createFilmDetailsTemplate = (film, commentEmoji) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">USA</td>
+                  <td class="film-details__cell">${releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
                   <td class="film-details__cell">
-                    <span class="film-details__genre">Drama</span>
-                    <span class="film-details__genre">Film-Noir</span>
-                    <span class="film-details__genre">Mystery</span></td>
+                    ${genre}
                 </tr>
               </table>
 
@@ -96,49 +101,12 @@ const createFilmDetailsTemplate = (film, commentEmoji) => {
             <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${viewed}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${inFavouriteList}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${inFavoriteList}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
 
         <div class="form-details__bottom-container">
-          <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
-
-            ${commentsTemplate}
-
-            <div class="film-details__new-comment">
-                <div for="add-emoji" class="film-details__add-emoji-label">
-                <input type="hidden" name="add-emoji" value="${commentEmoji}">
-                ${emojiMarkup}
-                </div>
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-              </label>
-
-              <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-                <label class="film-details__emoji-label" for="emoji-smile">
-                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-                <label class="film-details__emoji-label" for="emoji-sleeping">
-                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-                <label class="film-details__emoji-label" for="emoji-puke">
-                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-                <label class="film-details__emoji-label" for="emoji-angry">
-                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-                </label>
-              </div>
-            </div>
-          </section>
         </div>
       </form>
     </section>`
@@ -150,7 +118,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     super();
 
     this._film = film;
-
     this._onObjectClick = null;
     this._onAddWatchListClick = null;
     this._onAddToFavoriteClick = null;
@@ -158,11 +125,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._onCommentDeleteClick = null;
     this._onCommentSubmit = null;
     this.commentEmoji = null;
-    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, this.commentEmoji);
+    return createFilmDetailsTemplate(this._film, this._comments, this.commentEmoji);
+  }
+
+  getCommentsSection() {
+    return this.getElement().querySelector(`.form-details__bottom-container`);
   }
 
   recoveryListeners() {
@@ -172,7 +142,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setOnDetailsMarkAsWatchedClick(this._onMarkAsWatchedClick);
     this.setOnDeleteCommentClick(this._onCommentDeleteClick);
     this.setAddCommentSubmit(this._onCommentSubmit);
-    this._subscribeOnEvents();
   }
 
   rerender() {
@@ -245,11 +214,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._onCommentSubmit = onSubmit;
   }
 
-  _subscribeOnEvents() {
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, (evt) => {
-      this.commentEmoji = evt.target.value;
-      this.rerender();
-    });
-  }
+
 }
 
