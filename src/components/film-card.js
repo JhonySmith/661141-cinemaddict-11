@@ -1,4 +1,4 @@
-import AbstractClass from "./abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 import moment from "moment";
 
 const createFilmCardTemlate = (film) => {
@@ -35,7 +35,7 @@ const createFilmCardTemlate = (film) => {
   );
 };
 
-export default class FilmCardComponent extends AbstractClass {
+export default class FilmCardComponent extends AbstractComponent {
   constructor(film) {
     super();
 
@@ -50,6 +50,7 @@ export default class FilmCardComponent extends AbstractClass {
     this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onObjectClick);
     this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onObjectClick);
     this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onObjectClick);
+    this._openDetails = onObjectClick;
   }
 
   onFilmCardAddWatchListClick(onObjectClick) {

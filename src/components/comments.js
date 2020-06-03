@@ -1,6 +1,10 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import moment from "moment";
 
+const Mode = {
+  DELETING: `deleting`,
+};
+
 const createCommentMarkup = (comment) => {
   const authorName = comment.author;
   const emotion = comment.emotion;
@@ -25,9 +29,11 @@ const createCommentMarkup = (comment) => {
   );
 };
 
-export const createCommentsTemplate = (comments, commentEmoji) => {
+export const createCommentsTemplate = (comments, mode, commentEmoji) => {
   const commentsTemplate = comments.map((it) => createCommentMarkup(it)).join(`\n`);
   const emojiMarkup = commentEmoji ? `<img src="./images/emoji/${commentEmoji}.png" alt="${commentEmoji}" width="55" height="55">` : ` `;
+
+
   return (
     `<section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -74,10 +80,11 @@ export default class CommentsComponent extends AbstractSmartComponent {
     super();
 
     this._comments = comments;
+    this._mode = null;
   }
 
   getTemplate() {
-    return createCommentsTemplate(this._comments);
+    return createCommentsTemplate(this._comments, this._mode);
   }
 
   setDelelteClick(onClick) {
@@ -86,7 +93,11 @@ export default class CommentsComponent extends AbstractSmartComponent {
         delButton.addEventListener(`click`, (evt) => {
           evt.preventDefault();
           const commentId = evt.target.closest(`li`).dataset.id;
+          const button = evt.target.closest(`button`);
+          button.textContent = `Deleting...`;
+          button.disabled = true;
           onClick(commentId);
+          this._mode = Mode.DELETING;
         });
       });
 

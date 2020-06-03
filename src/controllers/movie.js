@@ -31,7 +31,8 @@ export default class MovieController {
 
     this._film = null;
     this._comments = null;
-    this._filmsDetailsController = null;
+    this._commentsModel = new CommentsModel();
+    this._filmsDetailsController = new FilmDetailsController(this._onDataChange, this._onViewChange, this._api, this);
   }
 
   render(film) {
@@ -41,6 +42,9 @@ export default class MovieController {
 
     if (oldFilmCardComponent) {
       replace(this._filmCardComponent, oldFilmCardComponent);
+      if (this._mode === Mode.DETAILS) {
+        this._openFilmDetails();
+      }
     } else {
       renderComponent(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
@@ -77,13 +81,11 @@ export default class MovieController {
   }
 
   _openFilmDetails() {
-    const commentsModel = new CommentsModel();
-    this._filmsDetailsController = new FilmDetailsController(this._onDataChange, this._onViewChange, this._api, this);
-
     this._api.getComments(this._film.id)
       .then((comments) => {
-        commentsModel.setComments(comments);
-        this._filmsDetailsController.render(this._film, commentsModel.getComments());
+        this._commentsModel.setComments(comments);
+        this._filmsDetailsController.render(this._film, this._commentsModel.getComments());
+        this._mode = Mode.DETAILS;
       });
   }
 

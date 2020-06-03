@@ -1,7 +1,7 @@
 import FilmDetails from "../components/film-details.js";
 import CommentsController from "../controllers/comments.js";
 import CommentsModel from "../models/comments";
-import {renderComponent, remove} from "../utils/render.js";
+import {renderComponent, remove, replace} from "../utils/render.js";
 
 export default class FilmDetailsController {
   constructor(onDataChange, onViewChange, api, movieController) {
@@ -16,13 +16,19 @@ export default class FilmDetailsController {
   }
 
   render(film) {
+    const oldFilmDetailsComponent = this._filmDetailsComponent;
     this._filmDetailsComponent = this._getFilmDetailCard(film);
-    renderComponent(this._pageBody, this._filmDetailsComponent);
+
+    if (oldFilmDetailsComponent) {
+      replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+    } else {
+      renderComponent(this._pageBody, this._filmDetailsComponent);
+    }
 
     const commentsModel = new CommentsModel();
     const commentsContainer = this._filmDetailsComponent.getCommentsSection();
 
-    const commentsController = new CommentsController(commentsContainer, this._onDataChange, this._movieController);
+    const commentsController = new CommentsController(commentsContainer, this._onDataChange, this._movieController, this._api);
 
 
     this._api.getComments(film.id)
@@ -40,7 +46,8 @@ export default class FilmDetailsController {
       this.destroy();
     });
 
-    filmDetails.setOnDetailsInWatchListClick(() => {
+    filmDetails.setOnDetailsInWatchListClick((evt) => {
+      evt.preventDefault();
       this._movieController._onWatchList();
     });
 

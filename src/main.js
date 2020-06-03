@@ -4,8 +4,9 @@ import FilmsComponent from "./components/films";
 import FilmsModel from "./models/films.js";
 import FilterControl from "./controllers/filter.js";
 import ProfileComponent from "./components/profile";
+import LoadingComponent from "./components/loading.js";
 
-import {renderComponent} from "./utils/render.js";
+import {renderComponent, remove} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic eo0w590ik29889a`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
@@ -26,8 +27,16 @@ const filmsBoardController = new FilmsBoardController(filmsBoard, filmsModel, ap
 
 renderComponent(pageMain, filmsBoard);
 
+const loadingComponent = new LoadingComponent();
+renderComponent(filmsBoard.getElement(), loadingComponent);
+
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(films);
+  })
+  .finally(() => {
+    remove(loadingComponent);
     filmsBoardController.render();
   });
+
+
