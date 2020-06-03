@@ -1,4 +1,5 @@
 import AbstractClass from "./abstract-component.js";
+import moment from "moment";
 
 const createFilmCardTemlate = (film) => {
 
@@ -10,7 +11,8 @@ const createFilmCardTemlate = (film) => {
   const viewed = film.viewed;
   const inFavoriteList = film.inFavoriteList;
   const rating = film.rating;
-  const releaseDate = film.releaseDate.toLocaleString(`en-US`, {year: `numeric`});
+  const movieDuration = moment.utc(moment.duration(film.movieDuration, `minutes`).asMilliseconds()).format(`H[h] mm[m]`);
+  const releaseDate = moment(film.releaseDate).format(`YYYY`);
 
   return (
     `<article class="film-card">
@@ -18,7 +20,7 @@ const createFilmCardTemlate = (film) => {
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${releaseDate}</span>
-            <span class="film-card__duration">1h 55m</span>
+            <span class="film-card__duration">${movieDuration}</span>
             <span class="film-card__genre">Musical</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">

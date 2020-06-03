@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomCommentDate} from "../utils.js";
 import {encode} from "he";
+import moment from "moment";
 // Карточка с деталями фильма
 
 const YOUR_COMMENT = `You`;
@@ -21,12 +22,12 @@ const createFilmDetailsTemplate = (film) => {
   const genre = createGenreTemplate(film.genre);
   const inFavoriteList = film.inFavoriteList ? `checked` : ``;
   const inWatchList = film.inWatchList ? `checked` : ``;
-  const movieDuration = film.movieDuration;
+  const movieDuration = moment.utc(moment.duration(film.movieDuration, `minutes`).asMilliseconds()).format(`H[h] mm[m]`);
   const originalTitle = film.originalTitle;
   const poster = film.poster;
   const rating = film.rating;
   const releaseCountry = film.releaseCountry;
-  const releaseDate = film.releaseDate;
+  const releaseDate = moment(film.releaseDate).format(`D MMMM YYYY`);
   const screenwriters = film.screenwriters;
   const title = film.title;
   const viewed = film.viewed ? `checked` : ``;

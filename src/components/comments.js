@@ -1,10 +1,11 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import moment from "moment";
 
 const createCommentMarkup = (comment) => {
   const authorName = comment.author;
   const emotion = comment.emotion;
   const commentText = comment.comment;
-  const date = comment.date;
+  const date = moment(comment.date).fromNow();
   const id = comment.id;
 
   return (
